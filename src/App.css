@@ -1,0 +1,749 @@
+/* App.css - OLED-Friendly True Black Design */
+.ant-layout {
+  background: #000000 !important;
+}
+
+.ant-layout-header {
+  background: #000000 !important;
+  border-bottom: 1px solid #333333 !important;
+  padding: 0 24px !important;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-layout-header .ant-typography {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Content Area Styling */
+.ant-layout-content {
+  background: #000000 !important;
+  padding: 24px !important;
+}
+
+/* Card Enhancements - OLED Black Cards */
+.ant-card {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ant-card:hover {
+  border-color: #555555 !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-card-head {
+  background: #000000 !important;
+  border-bottom: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-card-head-title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Question mark icon styling */
+.ant-card-head-title .anticon-question-circle {
+  color: #888888 !important;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.ant-card-head-title .anticon-question-circle:hover {
+  color: #ffffff !important;
+}
+
+/* Tooltip styling for OLED theme */
+.ant-tooltip .ant-tooltip-inner {
+  background: #222222 !important;
+  color: #ffffff !important;
+  border: 1px solid #555555 !important;
+}
+
+.ant-tooltip .ant-tooltip-arrow-content {
+  background: #222222 !important;
+  border: 1px solid #555555 !important;
+}
+
+.ant-card-body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Table Styling for OLED */
+.ant-table {
+  background: #000000 !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #000000 !important;
+  border-bottom: 1px solid #333333 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.ant-table-tbody > tr > td {
+  background: #000000 !important;
+  border-bottom: 1px solid #222222 !important;
+  color: #ffffff !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #111111 !important;
+}
+
+/* Input and Search Styling */
+.ant-input {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-input:hover, .ant-input:focus {
+  border-color: #555555 !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-input::placeholder {
+  color: #888888 !important;
+  background: transparent !important;
+}
+
+/* Search Input Specific Styling */
+.ant-input-search .ant-input {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-input-search .ant-input::placeholder {
+  color: #888888 !important;
+  background: transparent !important;
+}
+
+/* Search Icon Styling */
+.ant-input-search .ant-input-suffix {
+  color: #888888 !important;
+}
+
+.ant-input-search .ant-input-suffix .ant-input-search-icon {
+  color: #888888 !important;
+}
+
+.ant-input-search .ant-input-suffix .ant-input-search-icon:hover {
+  color: #ffffff !important;
+}
+
+/* Clear button styling */
+.ant-input-clear-icon {
+  color: #888888 !important;
+}
+
+.ant-input-clear-icon:hover {
+  color: #ffffff !important;
+}
+
+/* Input Group Styling (for search with addons) */
+.ant-input-group-wrapper {
+  background: #000000 !important;
+}
+
+.ant-input-wrapper {
+  background: #000000 !important;
+}
+
+.ant-input-group {
+  background: #000000 !important;
+}
+
+/* Input affix wrapper (contains prefix/suffix) */
+.ant-input-affix-wrapper {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-input-affix-wrapper:hover, .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused {
+  border-color: #555555 !important;
+  background: #000000 !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+.ant-input-affix-wrapper .ant-input::placeholder {
+  color: #888888 !important;
+  background: transparent !important;
+}
+
+/* Button Styling */
+.ant-btn {
+  border: 1px solid #333333 !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.ant-btn:hover {
+  border-color: #555555 !important;
+  background: #111111 !important;
+  color: #ffffff !important;
+}
+
+.ant-btn-primary {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+}
+
+.ant-btn-primary:hover {
+  background: #40a9ff !important;
+  border-color: #40a9ff !important;
+  color: #ffffff !important;
+}
+
+/* Pagination Styling */
+.ant-pagination .ant-pagination-item {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+}
+
+.ant-pagination .ant-pagination-item a {
+  color: #ffffff !important;
+}
+
+.ant-pagination .ant-pagination-item:hover {
+  border-color: #555555 !important;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+/* Dropdown Styling */
+.ant-select {
+  background: #000000 !important;
+}
+
+.ant-select .ant-select-selector {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-select:hover .ant-select-selector {
+  border-color: #555555 !important;
+}
+
+/* Drawer Styling */
+.ant-drawer-content-wrapper {
+  background: #000000 !important;
+}
+
+.ant-drawer-header {
+  background: #000000 !important;
+  border-bottom: 1px solid #333333 !important;
+}
+
+.ant-drawer-title {
+  color: #ffffff !important;
+}
+
+.ant-drawer-body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Form Styling */
+.ant-form-item-label > label {
+  color: #ffffff !important;
+}
+
+.ant-form-item-explain {
+  color: #cccccc !important;
+}
+
+/* Switch Styling */
+.ant-switch {
+  background: #333333 !important;
+}
+
+.ant-switch-checked {
+  background: #1890ff !important;
+}
+
+/* Input Number Styling */
+.ant-input-number {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-input-number:hover, .ant-input-number:focus {
+  border-color: #555555 !important;
+  background: #000000 !important;
+}
+
+.ant-input-number-input {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Override active styling for potion cost input */
+.ant-input-number.override-active {
+  background-color: #1a1a1a !important;
+  border-color: #d4b106 !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 2px rgba(212, 177, 6, 0.2) !important;
+}
+
+.ant-input-number.override-active:hover {
+  border-color: #d4b106 !important;
+  box-shadow: 0 0 0 2px rgba(212, 177, 6, 0.3) !important;
+}
+
+.ant-input-number.override-active:focus,
+.ant-input-number.override-active.ant-input-number-focused {
+  border-color: #d4b106 !important;
+  box-shadow: 0 0 0 2px rgba(212, 177, 6, 0.4) !important;
+}
+
+.ant-input-number.override-active .ant-input-number-input {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+/* Radio Button Styling */
+.ant-radio-button-wrapper {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-radio-button-wrapper:hover {
+  border-color: #555555 !important;
+  color: #ffffff !important;
+}
+
+.ant-radio-button-wrapper-checked {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+}
+
+.ant-radio-button-wrapper-checked:hover {
+  background: #40a9ff !important;
+  border-color: #40a9ff !important;
+}
+
+/* Typography */
+.ant-typography {
+  color: #ffffff !important;
+}
+
+/* Divider */
+.ant-divider {
+  border-color: #333333 !important;
+}
+
+/* Message/Notification Override */
+.ant-message {
+  color: #ffffff !important;
+}
+
+/* Message Notice Styling */
+.ant-message .ant-message-notice {
+  background: #222222 !important;
+  border: 1px solid #555555 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8) !important;
+  width: auto !important;
+  max-width: 400px !important;
+  min-width: 200px !important;
+}
+
+.ant-message .ant-message-notice-content {
+  background: #222222 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  padding: 8px 16px !important;
+  white-space: nowrap !important;
+  width: auto !important;
+}
+
+/* Success Message */
+.ant-message .ant-message-success .ant-message-notice-content {
+  background: #1f5f3f !important;
+  border-left: 4px solid #52c41a !important;
+  color: #ffffff !important;
+  width: auto !important;
+}
+
+.ant-message .ant-message-success .anticon {
+  color: #52c41a !important;
+}
+
+/* Error Message */
+.ant-message .ant-message-error .ant-message-notice-content {
+  background: #5f1f1f !important;
+  border-left: 4px solid #ff4d4f !important;
+  color: #ffffff !important;
+  width: auto !important;
+}
+
+.ant-message .ant-message-error .anticon {
+  color: #ff4d4f !important;
+}
+
+/* Warning Message */
+.ant-message .ant-message-warning .ant-message-notice-content {
+  background: #5f4f1f !important;
+  border-left: 4px solid #faad14 !important;
+  color: #ffffff !important;
+  width: auto !important;
+}
+
+.ant-message .ant-message-warning .anticon {
+  color: #faad14 !important;
+}
+
+/* Info Message */
+.ant-message .ant-message-info .ant-message-notice-content {
+  background: #1f3f5f !important;
+  border-left: 4px solid #1890ff !important;
+  color: #ffffff !important;
+  width: auto !important;
+}
+
+.ant-message .ant-message-info .anticon {
+  color: #1890ff !important;
+}
+
+/* Loading Message */
+.ant-message .ant-message-loading .ant-message-notice-content {
+  background: #2f2f2f !important;
+  border-left: 4px solid #1890ff !important;
+  color: #ffffff !important;
+  width: auto !important;
+}
+
+.ant-message .ant-message-loading .anticon {
+  color: #1890ff !important;
+}
+
+/* Spin Loading */
+.ant-spin-dot-item {
+  background-color: #1890ff !important;
+}
+
+.profit-table .ant-table-tbody > tr.profit-positive > td {
+  background-color: rgba(0, 255, 0, 0.15) !important;
+  border-left: 3px solid #00ff00 !important;
+}
+
+.profit-table .ant-table-tbody > tr.profit-warning > td {
+  background-color: rgba(255, 165, 0, 0.15) !important;
+  border-left: 3px solid #ffa500 !important;
+}
+
+.profit-table .ant-table-tbody > tr.profit-negative > td {
+  background-color: rgba(255, 0, 0, 0.15) !important;
+  border-left: 3px solid #ff0000 !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-excellent > td {
+  background-color: rgba(0, 255, 0, 0.15) !important;
+  border-left: 3px solid #00ff00 !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-good > td {
+  background-color: rgba(0, 191, 255, 0.15) !important;
+  border-left: 3px solid #00bfff !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-fair > td {
+  background-color: rgba(128, 128, 128, 0.15) !important;
+  border-left: 3px solid #808080 !important;
+}
+
+/* Hover effects for color-coded rows */
+.profit-table .ant-table-tbody > tr.profit-positive:hover > td {
+  background-color: rgba(0, 255, 0, 0.25) !important;
+}
+
+.profit-table .ant-table-tbody > tr.profit-warning:hover > td {
+  background-color: rgba(255, 165, 0, 0.25) !important;
+}
+
+.profit-table .ant-table-tbody > tr.profit-negative:hover > td {
+  background-color: rgba(255, 0, 0, 0.25) !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-excellent:hover > td {
+  background-color: rgba(0, 255, 0, 0.25) !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-good:hover > td {
+  background-color: rgba(0, 191, 255, 0.25) !important;
+}
+
+.underpriced-table .ant-table-tbody > tr.underpriced-fair:hover > td {
+  background-color: rgba(128, 128, 128, 0.25) !important;
+}
+
+/* Text color enhancements for profit values */
+.profit-positive-text {
+  color: #00ff00 !important;
+  font-weight: 600;
+}
+
+.profit-warning-text {
+  color: #ffa500 !important;
+  font-weight: 600;
+}
+
+.profit-negative-text {
+  color: #ff0000 !important;
+  font-weight: 600;
+}
+
+/* Text color enhancements for underpriced values */
+.underpriced-excellent-text {
+  color: #00ff00 !important;
+  font-weight: 600;
+}
+
+.underpriced-good-text {
+  color: #00bfff !important;
+  font-weight: 600;
+}
+
+.underpriced-fair-text {
+  color: #808080 !important;
+  font-weight: 600;
+}
+
+/* Tag styling for OLED */
+.ant-tag {
+  background: #000000 !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.ant-tag-green {
+  background: rgba(0, 255, 0, 0.15) !important;
+  border-color: #00ff00 !important;
+  color: #00ff00 !important;
+}
+
+.ant-tag-blue {
+  background: rgba(0, 191, 255, 0.15) !important;
+  border-color: #00bfff !important;
+  color: #00bfff !important;
+}
+
+.ant-tag-default {
+  background: rgba(128, 128, 128, 0.15) !important;
+  border-color: #808080 !important;
+  color: #808080 !important;
+}
+
+.fetch-data-button {
+  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
+}
+
+/* Table Height Controls */
+.ant-slider .ant-slider-rail {
+  background: #333333 !important;
+}
+
+.ant-slider .ant-slider-track {
+  background: #1890ff !important;
+}
+
+.ant-slider .ant-slider-handle {
+  border-color: #1890ff !important;
+  background: #1890ff !important;
+}
+
+.ant-slider .ant-slider-handle:hover,
+.ant-slider .ant-slider-handle:focus {
+  border-color: #40a9ff !important;
+  box-shadow: 0 0 0 5px rgba(24, 144, 255, 0.12) !important;
+}
+
+.ant-slider .ant-slider-handle::after {
+  background: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.06) !important;
+}
+
+/* Drag-to-resize handle styles */
+.table-resize-handle {
+  height: 8px;
+  background-color: #f0f0f0;
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 4px 4px;
+  transition: background-color 0.3s;
+  user-select: none;
+  position: relative;
+}
+
+.table-resize-handle:hover {
+  background-color: #d9d9d9;
+}
+
+.table-resize-handle.dragging {
+  background-color: #1890ff;
+  transition: none;
+}
+
+.table-resize-handle-grip {
+  width: 30px;
+  height: 3px;
+  background-color: #d9d9d9;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.table-resize-handle:hover .table-resize-handle-grip {
+  background-color: #bfbfbf;
+}
+
+.table-resize-handle.dragging .table-resize-handle-grip {
+  background-color: #0050b3;
+}
+
+/* Collapsed table state styles */
+.table-resize-handle.collapsed {
+  background-color: #d9d9d9;
+}
+
+.table-resize-handle.collapsed .table-resize-handle-grip {
+  background-color: #bfbfbf;
+}
+
+.table-resize-handle.collapsed:hover {
+  background-color: #bfbfbf;
+}
+
+.table-resize-handle.collapsed:hover .table-resize-handle-grip {
+  background-color: #999999;
+}
+
+/* Responsive Design */
+@media (max-width: 1199px) {
+  /* Large screens and below - stack tables vertically */
+  .ant-row .ant-col {
+    margin-bottom: 24px;
+  }
+  
+  .ant-row .ant-col:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile screens - reduce padding and improve spacing */
+  .ant-layout-content {
+    padding: 16px !important;
+  }
+  
+  .ant-layout-header {
+    padding: 0 16px !important; /* Adjusted from 12px to be consistent with content */
+  }
+  
+  .ant-layout-header h3 {
+    font-size: 18px !important;
+  }
+  
+  .ant-layout-header .ant-space {
+    flex-wrap: wrap;
+    gap: 4px !important;
+  }
+  
+  .ant-layout-header .ant-btn {
+    font-size: 11px;
+    padding: 2px 6px;
+    height: 24px;
+  }
+  
+  /* Make tables more mobile-friendly */
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .ant-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Extra small screens - further optimizations */
+  .ant-layout-content {
+    padding: 12px !important;
+  }
+  
+  .ant-layout-header {
+    padding: 0 12px !important; /* Adjusted from 8px */
+    flex-direction: column;
+    height: auto !important;
+    line-height: normal !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  
+  .ant-layout-header h3 {
+    font-size: 16px !important;
+    margin: 4px 0 !important;
+  }
+  
+  .ant-layout-header .ant-space {
+    margin-top: 8px;
+    justify-content: center;
+  }
+  
+  .ant-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/*
+  The Row gutter={[24, 24]} in App.tsx handles vertical spacing 
+  between items when they stack, both in 'stacked' mode and 
+  when 'sideBySide' mode collapses on smaller screens (xs, sm).
+  Thus, no specific margin is needed for .layout-stacked .ant-col here.
+*/
+
+/* Side-by-side mode optimizations */
+.layout-sideBySide .ant-col {
+  display: flex; /* Allow card to stretch */
+}
+
+.layout-sideBySide .ant-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensure card takes full width of column */
+}
+
+.layout-sideBySide .ant-card-body {
+  flex: 1;
+  overflow: auto; /* Allow content within card body to scroll if needed */
+  padding: 16px; /* Adjust padding as needed */
+}
