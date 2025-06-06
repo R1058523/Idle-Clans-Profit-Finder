@@ -1,6 +1,46 @@
 // Data processing utilities for the Idle Clans Profit Finder
 import { LocalData, ApiData, ComparisonResult, UnderpricedResult, Settings, LocalItem } from './types';
 
+// Extract all item IDs that appear in the Shop section
+export const extractShopItemIds = (localData: LocalData): Set<number> => {
+  const shopItemIds = new Set<number>();
+
+  const addShopItem = (item: any) => {
+    if (item && typeof item === 'object' && item.id !== null && item.id !== undefined) {
+      shopItemIds.add(item.id);
+    }
+  };
+
+  const processShopCategory = (categoryData: any) => {
+    if (Array.isArray(categoryData)) {
+      categoryData.forEach(item => addShopItem(item));
+    } else if (typeof categoryData === 'object' && categoryData !== null) {
+      Object.keys(categoryData).forEach(subKey => {
+        const subCategory = categoryData[subKey];
+        if (Array.isArray(subCategory)) {
+          subCategory.forEach(item => addShopItem(item));
+        } else if (typeof subCategory === 'object' && subCategory !== null) {
+          Object.keys(subCategory).forEach(deepKey => {
+            const deepCategory = subCategory[deepKey];
+            if (Array.isArray(deepCategory)) {
+              deepCategory.forEach(item => addShopItem(item));
+            }
+          });
+        }
+      });
+    }
+  };
+  // Process all categories in the Shop object
+  if (localData.Shop) {
+    Object.keys(localData.Shop).forEach(categoryKey => {
+      const categoryData = localData.Shop![categoryKey];
+      processShopCategory(categoryData);
+    });
+  }
+
+  return shopItemIds;
+};
+
 // Extract all items from the complex nested structure of the local JSON data
 export const extractAllItems = (localData: LocalData): LocalItem[] => {
   const allItems: LocalItem[] = [];
@@ -89,6 +129,7 @@ export const calculateNetProfit = (grossProfit: number, settings: Settings): num
 // Compare local and API data to find profitable items
 export const compareData = (localData: LocalData, apiData: ApiData, settings: Settings): ComparisonResult[] => {
   const localItems = extractAllItems(localData);
+  const shopItemIds = extractShopItemIds(localData);
   const results: ComparisonResult[] = [];
 
   // Create a map of API items by ID for faster lookup
@@ -99,6 +140,11 @@ export const compareData = (localData: LocalData, apiData: ApiData, settings: Se
 
   localItems.forEach(localItem => {
     const apiItem = apiItemMap.get(localItem.id);
+    
+    // Skip items that exist in the shop
+    if (shopItemIds.has(localItem.id)) {
+      return;
+    }
     
     // Use apiItem.sellPrice (lowest market offer) and apiItem.sellVolume
     if (apiItem && apiItem.sellPrice > 0 && localItem.value > 0 && apiItem.sellVolume > 0) {
@@ -138,6 +184,7 @@ export const compareData = (localData: LocalData, apiData: ApiData, settings: Se
 // Find underpriced items based on the threshold
 export const findUnderpricedItems = (apiData: ApiData, localData: LocalData, settings: Settings): UnderpricedResult[] => {
   const localItems = extractAllItems(localData);
+  const shopItemIds = extractShopItemIds(localData);
   const results: UnderpricedResult[] = [];
 
   // Create a map of local items by ID for faster lookup
@@ -145,9 +192,14 @@ export const findUnderpricedItems = (apiData: ApiData, localData: LocalData, set
   localItems.forEach(localItem => {
     localItemMap.set(localItem.id, localItem);
   });
-
+  
   apiData.items.forEach(apiItem => {
     const localItem = localItemMap.get(apiItem.id);
+    
+    // Skip items that exist in the shop
+    if (shopItemIds.has(apiItem.id)) {
+      return;
+    }
     
     if (localItem && apiItem.dailyAveragePrice > 0 && apiItem.sellPrice > 0) {
       const priceRatio = (apiItem.sellPrice / apiItem.dailyAveragePrice) * 100;
