@@ -78,23 +78,26 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         <Divider />
 
         <Title level={5}><EyeOutlined /> Display Options</Title>
-        
-        <Form.Item 
+          <Form.Item 
           name="hideNonProfitable" 
           valuePropName="checked"
-          label="Hide non-profitable items"
         >
-          <Switch />
+          <Space>
+            <Switch />
+            <Text>Hide non-profitable items</Text>
+          </Space>
         </Form.Item>
 
         <Form.Item 
           name="hideSubProfitable" 
           valuePropName="checked"
-          label="Hide sub-profitable items"
           extra="Hides profitable items below threshold"
         >
-          <Switch />
-        </Form.Item>        <Form.Item 
+          <Space>
+            <Switch />
+            <Text>Hide sub-profitable items</Text>
+          </Space>
+        </Form.Item><Form.Item 
           name="minProfit" 
           label="Minimum Total Profit"
           extra="Filters based on total profit (all available volume)"
