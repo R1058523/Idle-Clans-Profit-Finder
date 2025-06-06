@@ -33,6 +33,9 @@ export interface LocalData {
   Items: {
     [category: string]: LocalItem[] | any;
   };
+  Shop?: {
+    [category: string]: any;
+  };
   References?: {
     categories: {
       [id: string]: string;
