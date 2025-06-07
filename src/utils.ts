@@ -1,7 +1,5 @@
-// Data processing utilities for the Idle Clans Profit Finder
 import { LocalData, ApiData, ComparisonResult, UnderpricedResult, Settings, LocalItem } from './types';
 
-// Extract all item IDs that appear in the Shop section
 export const extractShopItemIds = (localData: LocalData): Set<number> => {
   const shopItemIds = new Set<number>();
 
@@ -18,8 +16,7 @@ export const extractShopItemIds = (localData: LocalData): Set<number> => {
       Object.keys(categoryData).forEach(subKey => {
         const subCategory = categoryData[subKey];
         if (Array.isArray(subCategory)) {
-          subCategory.forEach(item => addShopItem(item));
-        } else if (typeof subCategory === 'object' && subCategory !== null) {
+          subCategory.forEach(item => addShopItem(item));        } else if (typeof subCategory === 'object' && subCategory !== null) {
           Object.keys(subCategory).forEach(deepKey => {
             const deepCategory = subCategory[deepKey];
             if (Array.isArray(deepCategory)) {
@@ -30,7 +27,7 @@ export const extractShopItemIds = (localData: LocalData): Set<number> => {
       });
     }
   };
-  // Process all categories in the Shop object
+
   if (localData.Shop) {
     Object.keys(localData.Shop).forEach(categoryKey => {
       const categoryData = localData.Shop![categoryKey];
@@ -41,14 +38,11 @@ export const extractShopItemIds = (localData: LocalData): Set<number> => {
   return shopItemIds;
 };
 
-// Extract all items from the complex nested structure of the local JSON data
 export const extractAllItems = (localData: LocalData): LocalItem[] => {
   const allItems: LocalItem[] = [];
   const addedIds = new Set<number>();
-
   const processItem = (item: any, category: string) => {
     if (item && typeof item === 'object' && item.id !== null && item.id !== undefined) {
-      // Avoid duplicates
       if (!addedIds.has(item.id)) {
         addedIds.add(item.id);
         allItems.push({
@@ -63,30 +57,25 @@ export const extractAllItems = (localData: LocalData): LocalItem[] => {
       }
     }
   };
-
   const processCategory = (categoryData: any, categoryName: string) => {
     if (Array.isArray(categoryData)) {
       categoryData.forEach(item => processItem(item, categoryName));
     } else if (typeof categoryData === 'object' && categoryData !== null) {
-      // Handle nested categories (like weapons, armor, etc.)
       Object.keys(categoryData).forEach(subCatKey => {
         const subCategory = categoryData[subCatKey];
         if (Array.isArray(subCategory)) {
           subCategory.forEach(item => processItem(item, `${categoryName}_${subCatKey}`));
         } else if (typeof subCategory === 'object' && subCategory !== null) {
-          // Handle deeper nesting (like melee.longswords, etc.)
           Object.keys(subCategory).forEach(deepKey => {
             const deepCategory = subCategory[deepKey];
             if (Array.isArray(deepCategory)) {
               deepCategory.forEach(item => processItem(item, `${categoryName}_${subCatKey}_${deepKey}`));
             }
           });
-        }
-      });
+        }      });
     }
   };
 
-  // Process all top-level categories in the Items object
   if (localData.Items) {
     Object.keys(localData.Items).forEach(categoryKey => {
       const categoryData = localData.Items[categoryKey];
@@ -97,16 +86,13 @@ export const extractAllItems = (localData: LocalData): LocalItem[] => {
   return allItems;
 };
 
-// Calculate the final sell value with bonuses
 export const calculateSellValue = (baseValue: number, settings: Settings): number => {
   let finalValue = baseValue;
   
-  // Apply game sale bonus (+10%)
   if (settings.gameSaleBonus) {
     finalValue *= 1.10;
   }
   
-  // Apply negotiation potion bonus (+5%)
   if (settings.potionBonus) {
     finalValue *= 1.05;
   }
@@ -114,11 +100,9 @@ export const calculateSellValue = (baseValue: number, settings: Settings): numbe
   return Math.floor(finalValue);
 };
 
-// Calculate profit including potion cost
 export const calculateNetProfit = (grossProfit: number, settings: Settings): number => {
   let netProfit = grossProfit;
   
-  // Subtract potion cost if potion bonus is enabled
   if (settings.potionBonus) {
     netProfit -= settings.potionCost;
   }
@@ -126,13 +110,11 @@ export const calculateNetProfit = (grossProfit: number, settings: Settings): num
   return netProfit;
 };
 
-// Compare local and API data to find profitable items
 export const compareData = (localData: LocalData, apiData: ApiData, settings: Settings): ComparisonResult[] => {
   const localItems = extractAllItems(localData);
   const shopItemIds = extractShopItemIds(localData);
   const results: ComparisonResult[] = [];
 
-  // Create a map of API items by ID for faster lookup
   const apiItemMap = new Map();
   apiData.items.forEach(apiItem => {
     apiItemMap.set(apiItem.id, apiItem);
@@ -141,53 +123,42 @@ export const compareData = (localData: LocalData, apiData: ApiData, settings: Se
   localItems.forEach(localItem => {
     const apiItem = apiItemMap.get(localItem.id);
     
-    // Skip items that exist in the shop
     if (shopItemIds.has(localItem.id)) {
       return;
     }
     
-    // Use apiItem.sellPrice (lowest market offer) and apiItem.sellVolume
     if (apiItem && apiItem.sellPrice > 0 && localItem.value > 0 && apiItem.sellVolume > 0) {
       const sellValue = calculateSellValue(localItem.value, settings);
       const profitPerItem = sellValue - apiItem.sellPrice;
-      // Use sellVolume for total profit calculation
       const totalProfit = calculateNetProfit(profitPerItem * apiItem.sellVolume, settings);
       const profitPercentage = ((sellValue - apiItem.sellPrice) / apiItem.sellPrice) * 100;
 
-      // Apply filters
       if (settings.hideNonProfitable && totalProfit <= 0) {
         return;
       }
       
       if (settings.hideSubProfitable && totalProfit < settings.minProfit) {
         return;
-      }
-
-      results.push({
+      }      results.push({
         id: localItem.id,
         name: localItem.name,
         category: localItem.category || 'unknown',
         gameValue: sellValue,
-        marketSellPrice: apiItem.sellPrice, // Changed from marketBuyPrice
+        marketSellPrice: apiItem.sellPrice,
         profit: profitPerItem,
         profitPercentage: profitPercentage,
-        itemQuantity: apiItem.sellVolume || 0, // Changed from buyVolume
+        itemQuantity: apiItem.sellVolume || 0,
         totalProfit: totalProfit
-      });
-    }
+      });    }
   });
 
-  // Sort by total profit descending
   return results.sort((a, b) => b.totalProfit - a.totalProfit);
 };
 
-// Find underpriced items based on the threshold
 export const findUnderpricedItems = (apiData: ApiData, localData: LocalData, settings: Settings): UnderpricedResult[] => {
   const localItems = extractAllItems(localData);
-  const shopItemIds = extractShopItemIds(localData);
-  const results: UnderpricedResult[] = [];
+  const shopItemIds = extractShopItemIds(localData);  const results: UnderpricedResult[] = [];
 
-  // Create a map of local items by ID for faster lookup
   const localItemMap = new Map();
   localItems.forEach(localItem => {
     localItemMap.set(localItem.id, localItem);
@@ -196,7 +167,6 @@ export const findUnderpricedItems = (apiData: ApiData, localData: LocalData, set
   apiData.items.forEach(apiItem => {
     const localItem = localItemMap.get(apiItem.id);
     
-    // Skip items that exist in the shop
     if (shopItemIds.has(apiItem.id)) {
       return;
     }
@@ -221,12 +191,9 @@ export const findUnderpricedItems = (apiData: ApiData, localData: LocalData, set
       }
     }
   });
-
-  // Sort by price ratio ascending (most underpriced first)
   return results.sort((a, b) => a.priceRatio - b.priceRatio);
 };
 
-// Get category name from category ID if available in references
 export const getCategoryName = (categoryId: string, localData: LocalData): string => {
   if (localData.References?.categories?.[categoryId]) {
     return localData.References.categories[categoryId];
@@ -234,7 +201,6 @@ export const getCategoryName = (categoryId: string, localData: LocalData): strin
   return categoryId;
 };
 
-// Format numbers for display
 export const formatNumber = (num: number, decimals: number = 0): string => {
   return num.toLocaleString(undefined, { 
     minimumFractionDigits: decimals, 
@@ -242,7 +208,6 @@ export const formatNumber = (num: number, decimals: number = 0): string => {
   });
 };
 
-// Validate API data structure
 export const validateApiData = (data: any): boolean => {
   return Array.isArray(data) && data.every(item => 
     typeof item === 'object' && 
@@ -250,7 +215,6 @@ export const validateApiData = (data: any): boolean => {
   );
 };
 
-// Validate local data structure
 export const validateLocalData = (data: any): boolean => {
   return typeof data === 'object' && 
          data !== null && 

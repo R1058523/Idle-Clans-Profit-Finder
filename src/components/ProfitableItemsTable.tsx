@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Table, Card, Input, Space, Typography, Tag, Tooltip, Switch as AntSwitch, Button } from 'antd'; // Added AntSwitch
-import { SearchOutlined, QuestionCircleOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
+import { Table, Card, Input, Space, Typography, Tag, Tooltip, Switch as AntSwitch, Button } from 'antd';
+import { QuestionCircleOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { ComparisonResult } from '../types';
+import { formatNumber } from '../utils';
 
 const { Search } = Input;
 const { Text } = Typography;
@@ -10,9 +11,9 @@ const { Text } = Typography;
 interface ProfitableItemsTableProps {
   data: ComparisonResult[];
   loading: boolean;
-  gameSaleBonus: boolean; // New prop
-  potionBonus: boolean; // New prop
-  onBonusChange: (type: 'gameSaleBonus' | 'potionBonus', checked: boolean) => void; // New prop
+  gameSaleBonus: boolean;
+  potionBonus: boolean;
+  onBonusChange: (type: 'gameSaleBonus' | 'potionBonus', checked: boolean) => void;
 }
 
 const ProfitableItemsTable: React.FC<ProfitableItemsTableProps> = ({ 
@@ -21,21 +22,15 @@ const ProfitableItemsTable: React.FC<ProfitableItemsTableProps> = ({
   gameSaleBonus, 
   potionBonus, 
   onBonusChange 
-}) => {  const [searchText, setSearchText] = useState('');
-  const [tableHeight, setTableHeight] = useState(400); // Default height in pixels
+}) => {
+  const [searchText, setSearchText] = useState('');
+  const [tableHeight, setTableHeight] = useState(400);
   const [isDragging, setIsDragging] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const formatNumber = (num: number, decimals: number = 0): string => {
-    return num.toLocaleString(undefined, { 
-      minimumFractionDigits: decimals, 
-      maximumFractionDigits: decimals 
-    });
-  };  const filteredData = data.filter(item =>
+  const filteredData = data.filter(item =>
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
-
-  // Drag resize functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -104,7 +99,8 @@ const ProfitableItemsTable: React.FC<ProfitableItemsTableProps> = ({
       sorter: (a, b) => a.itemQuantity - b.itemQuantity,
       render: (value: number) => formatNumber(value),
       align: 'right',
-    },    {
+    },
+    {
       title: 'Profit/Each',
       dataIndex: 'profit',
       key: 'profit',
@@ -188,8 +184,8 @@ const ProfitableItemsTable: React.FC<ProfitableItemsTableProps> = ({
           >
             <QuestionCircleOutlined style={{ color: '#888888', fontSize: '14px' }} />
           </Tooltip>
-        </Space>
-      }extra={
+        </Space>      }
+      extra={
         <Space direction="vertical" style={{ width: '100%' }}>
           <Space style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <Space>
@@ -224,11 +220,12 @@ const ProfitableItemsTable: React.FC<ProfitableItemsTableProps> = ({
                 allowClear
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                style={{ width: 200 }}
-              />
-            </Space>          </Space>
+                style={{ width: 200 }}              />
+            </Space>
+          </Space>
         </Space>
-      }    >
+      }
+    >
       {!isCollapsed && (
         <Table<ComparisonResult>
           columns={columns}

@@ -10,26 +10,28 @@ interface DataFetcherProps {
 }
 
 const DataFetcher: React.FC<DataFetcherProps> = ({ onDataFetch, onSettingsClick }) => {
-  const [loading, setLoading] = useState(false);  const loadLocalJsonData = async (): Promise<LocalData> => {
+  const [loading, setLoading] = useState(false);
+
+  const loadLocalJsonData = async (): Promise<LocalData> => {
     try {
       return gameData as LocalData;
     } catch (error) {
       console.error('Error loading local JSON:', error);
       throw new Error('Failed to load game data. Please refresh the page and try again.');
     }
-  };
-  const fetchApiData = async (): Promise<ApiData> => {
+  };  const fetchApiData = async (): Promise<ApiData> => {
     try {
       const apiUrl = 'https://query.idleclans.com/api/PlayerMarket/items/prices/latest?includeAveragePrice=true';
       
       const response = await fetch(apiUrl, {
         cache: 'no-cache'
       });
-      
+
       if (!response.ok) {
         throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
-        const apiData = await response.json();
+      
+      const apiData = await response.json();
       
       if (!Array.isArray(apiData)) {
         throw new Error('API returned unexpected data format (not an array)');
@@ -50,11 +52,10 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ onDataFetch, onSettingsClick 
       };
     } catch (error) {
       console.error('Error fetching API data:', error);
-      // Re-throw the error to be caught by handleFetchData
       if (error instanceof Error) {
-        throw error; // Re-throw the original error if it's an Error instance
+        throw error;
       }
-      throw new Error('An unknown error occurred while fetching API data.'); // Throw a generic error otherwise
+      throw new Error('An unknown error occurred while fetching API data.');
     }
   };
 

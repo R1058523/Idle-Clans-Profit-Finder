@@ -22,33 +22,21 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   layoutMode,
   onLayoutModeChange,
 }) => {  const [form] = Form.useForm();
-  
-  // Use Form.useWatch with a local state backup for immediate UI updates
-  const formOverrideValue = Form.useWatch('overridePotionCost', form);
-  const [localOverride, setLocalOverride] = React.useState(settings.overridePotionCost);
-  // Use form value when available, fallback to local state, and ensure it matches settings
-  const overridePotionCost = formOverrideValue !== undefined ? formOverrideValue : localOverride;
-  
+  const overridePotionCost = Form.useWatch('overridePotionCost', form) ?? settings.overridePotionCost;
   const handleFormChange = (changedValues: any, allValues: any) => {
-    // Update local state immediately for UI responsiveness
-    if ('overridePotionCost' in changedValues) {
-      setLocalOverride(changedValues.overridePotionCost);
-    }
-    onSettingsChange(allValues);
+    onSettingsChange({
+      ...settings,
+      ...allValues
+    });
   };
 
   const handleLayoutModeChange = (e: any) => {
     onLayoutModeChange(e.target.value);
-  };  // Update form if settings change from outside (e.g., table toggles or auto-update from market data)
+  };
+
   React.useEffect(() => {
     form.setFieldsValue(settings);
-    setLocalOverride(settings.overridePotionCost);
-    
-    // Force the form to refresh by triggering a re-render
-    // This is especially important for the potionCost field when it's auto-updated
-    form.validateFields().catch(() => {});
   }, [settings, form]);
-
   return (
     <Drawer
       title="Settings"
@@ -56,11 +44,13 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
       onClose={onClose}
       open={visible}
       width={400}
-    >      <Form
+    >
+      <Form
         form={form}
         layout="vertical"
-        initialValues={settings} // This will set initial values
         onValuesChange={handleFormChange}
+        initialValues={settings}
+        preserve={false}
       >
         <Title level={5}><LayoutOutlined /> Layout Options</Title>
         <Form.Item label="Table Layout">
@@ -77,27 +67,24 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
         <Divider />
 
-        <Title level={5}><EyeOutlined /> Display Options</Title>
-          <Form.Item 
+        <Title level={5}><EyeOutlined /> Display Options</Title>        <Form.Item 
           name="hideNonProfitable" 
           valuePropName="checked"
+          label="Hide non-profitable items"
         >
-          <Space>
-            <Switch />
-            <Text>Hide non-profitable items</Text>
-          </Space>
+          <Switch />
         </Form.Item>
 
         <Form.Item 
           name="hideSubProfitable" 
           valuePropName="checked"
+          label="Hide sub-profitable items"
           extra="Hides profitable items below threshold"
         >
-          <Space>
-            <Switch />
-            <Text>Hide sub-profitable items</Text>
-          </Space>
-        </Form.Item><Form.Item 
+          <Switch />
+        </Form.Item>
+
+        <Form.Item 
           name="minProfit" 
           label="Minimum Total Profit"
           extra="Filters based on total profit (all available volume)"
@@ -108,7 +95,9 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             step={100}
             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           />
-        </Form.Item><Form.Item 
+        </Form.Item>
+
+        <Form.Item 
           name="underpricedThreshold" 
           label="Underpriced Threshold (%)"
           extra="Items selling below this percentage of their average price"
@@ -122,7 +111,9 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
           />
         </Form.Item>
 
-        <Divider />        <Title level={5}><CalculatorOutlined /> Price Calculations</Title>
+        <Divider />
+
+        <Title level={5}><CalculatorOutlined /> Price Calculations</Title>
 
         <Form.Item
           name="potionCost" 
@@ -150,33 +141,24 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         </Form.Item>        <Form.Item 
           name="overridePotionCost" 
           valuePropName="checked"
-        >
-          <Space>            <Switch 
-              onChange={(checked) => {
-                // Immediately update local state for instant UI feedback
-                setLocalOverride(checked);
-                // Also update the form value to keep everything in sync
-                form.setFieldValue('overridePotionCost', checked);
-                // Trigger the form change handler manually
-                const currentValues = form.getFieldsValue();
-                handleFormChange({ overridePotionCost: checked }, { ...currentValues, overridePotionCost: checked });
-              }}
-            />
+          label={
             <Tooltip title="When enabled, prevents automatic updates to potion cost from fetched market data. Your manual cost will be preserved.">
-              <span key={`text-${overridePotionCost}`}>
+              <span>
                 {overridePotionCost ? <LockOutlined /> : <UnlockOutlined />} 
                 {overridePotionCost ? ' Manual Override Active' : ' Auto-Update from Market Data'}
               </span>
             </Tooltip>
-          </Space>
+          }
+        >
+          <Switch />
         </Form.Item>
 
         <Divider />
 
         <div style={{ marginTop: 16 }}>
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            Settings are automatically saved and applied to the data tables.
-            Refresh data to see changes in profit calculations.
+            Settings are automatically saved to your browser and persist across page refreshes. 
+            Changes are applied immediately to the data tables.
           </Text>
         </div>
       </Form>

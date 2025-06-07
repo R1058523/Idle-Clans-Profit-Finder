@@ -4,43 +4,115 @@ import DataFetcher from './components/DataFetcher';
 import ProfitableItemsTable from './components/ProfitableItemsTable';
 import UnderpricedItemsTable from './components/UnderpricedItemsTable';
 import SettingsDrawer from './components/SettingsDrawer';
-import { ApiData, LocalData, ComparisonResult, UnderpricedResult } from './types';
+import { ApiData, LocalData, ComparisonResult, UnderpricedResult, Settings } from './types';
 import { compareData, findUnderpricedItems } from './utils';
 import './App.css';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
+const DEFAULT_SETTINGS: Settings = {
+  gameSaleBonus: true,
+  potionBonus: false,
+  potionCost: 5000,
+  overridePotionCost: false,
+  minProfit: 1000,
+  hideNonProfitable: true,
+  hideSubProfitable: false,
+  underpricedThreshold: 40,
+};
+
+const STORAGE_KEYS = {
+  SETTINGS: 'idleClansSettings',
+  LAYOUT_MODE: 'idleClansLayoutMode',
+};
+
+const loadSettingsFromStorage = (): Settings => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+    if (saved) {
+      const parsedSettings = JSON.parse(saved);
+      return { ...DEFAULT_SETTINGS, ...parsedSettings };
+    }
+  } catch (error) {
+    console.warn('Failed to load settings from localStorage:', error);
+  }
+  return DEFAULT_SETTINGS;
+};
+
+const saveSettingsToStorage = (settings: Settings) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+  } catch (error) {
+    console.warn('Failed to save settings to localStorage:', error);
+  }
+};
+
+const loadLayoutModeFromStorage = (): 'stacked' | 'sideBySide' => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEYS.LAYOUT_MODE);
+    if (saved === 'stacked' || saved === 'sideBySide') {
+      return saved;
+    }
+  } catch (error) {
+    console.warn('Failed to load layout mode from localStorage:', error);
+  }
+  return 'stacked';
+};
+
+const saveLayoutModeToStorage = (layoutMode: 'stacked' | 'sideBySide') => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.LAYOUT_MODE, layoutMode);
+  } catch (error) {
+    console.warn('Failed to save layout mode to localStorage:', error);
+  }
+};
+
 const App: React.FC = () => {
   const [localData, setLocalData] = useState<LocalData | null>(null);
   const [apiData, setApiData] = useState<ApiData | null>(null);
   const [profitableItems, setProfitableItems] = useState<ComparisonResult[]>([]);
   const [underpricedItems, setUnderpricedItems] = useState<UnderpricedResult[]>([]);
-  const [loading, setLoading] = useState(false);  const [settingsVisible, setSettingsVisible] = useState(false);
-  const [layoutMode, setLayoutMode] = useState<'stacked' | 'sideBySide'>('stacked');
-  const [settings, setSettings] = useState({
-    gameSaleBonus: true,
-    potionBonus: false,
-    potionCost: 5000,
-    overridePotionCost: false,
-    minProfit: 1000,
-    hideNonProfitable: true,
-    hideSubProfitable: false,
-    underpricedThreshold: 40,
+  const [loading, setLoading] = useState(false);
+  const [settingsVisible, setSettingsVisible] = useState(false);
+  const [layoutMode, setLayoutMode] = useState<'stacked' | 'sideBySide'>(() => {
+    const loaded = loadLayoutModeFromStorage();
+    return loaded;
   });
+  const [settings, setSettings] = useState<Settings>(() => {
+    const loaded = loadSettingsFromStorage();
+    return loaded;
+  });
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Handler for bonus changes from ProfitableItemsTable
+  useEffect(() => {
+    setIsInitialized(true);
+  }, []);
+
+  useEffect(() => {
+    if (isInitialized) {
+      saveSettingsToStorage(settings);
+    }
+  }, [settings, isInitialized]);
+  useEffect(() => {
+    if (isInitialized) {
+      saveLayoutModeToStorage(layoutMode);
+    }
+  }, [layoutMode, isInitialized]);
+
   const handleBonusChange = (type: 'gameSaleBonus' | 'potionBonus', checked: boolean) => {
     setSettings(prevSettings => ({
       ...prevSettings,
       [type]: checked,
     }));
   };
+
   const handleDataFetch = async (local: LocalData, api: ApiData) => {
     setLoading(true);
     try {
       setLocalData(local);
-      setApiData(api);      // Auto-update potion cost from fetched data (only if not overridden)
+      setApiData(api);
+
       const potionItem = api.items.find(item => item.id === 409);
       
       if (potionItem && potionItem.dailyAveragePrice > 0 && !settings.overridePotionCost) {
@@ -65,10 +137,10 @@ const App: React.FC = () => {
     } catch (error) {
       console.error('Error processing data:', error);
       message.error('Failed to process data');
-    } finally {
-      setLoading(false);
+    } finally {      setLoading(false);
     }
   };
+
   useEffect(() => {
     if (localData && apiData) {
       setLoading(true);
@@ -83,9 +155,9 @@ const App: React.FC = () => {
         message.error('Failed to recalculate data');
       } finally {
         setLoading(false);
-      }
-    }
+      }    }
   }, [settings, localData, apiData]);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -94,7 +166,7 @@ const App: React.FC = () => {
         </Title>
         <DataFetcher onDataFetch={handleDataFetch} onSettingsClick={() => setSettingsVisible(true)} />
       </Header>
-      <Content style={{ padding: '24px' }}> 
+      <Content style={{ padding: '24px' }}>
         <Spin spinning={loading}>
           <Row gutter={[24, 24]} className={`layout-${layoutMode}`}>
             <Col 
@@ -107,9 +179,9 @@ const App: React.FC = () => {
               <ProfitableItemsTable 
                 data={profitableItems}
                 loading={loading}
-                gameSaleBonus={settings.gameSaleBonus} // Pass down
-                potionBonus={settings.potionBonus} // Pass down
-                onBonusChange={handleBonusChange} // Pass down handler
+                gameSaleBonus={settings.gameSaleBonus}
+                potionBonus={settings.potionBonus}
+                onBonusChange={handleBonusChange}
               />
             </Col>
             <Col 
@@ -123,15 +195,14 @@ const App: React.FC = () => {
                 data={underpricedItems}
                 loading={loading}
               />
-            </Col>
-          </Row>
+            </Col>          </Row>
         </Spin>
       </Content>
-
       <SettingsDrawer
         visible={settingsVisible}
-        onClose={() => setSettingsVisible(false)}        settings={settings}
-        onSettingsChange={setSettings} // This will now also receive updates from table toggles via handleBonusChange
+        onClose={() => setSettingsVisible(false)}
+        settings={settings}
+        onSettingsChange={setSettings}
         layoutMode={layoutMode}
         onLayoutModeChange={setLayoutMode}
       />

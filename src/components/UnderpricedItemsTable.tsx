@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Table, Card, Input, Space, Typography, Tag, Button, message, Tooltip } from 'antd';
-import { SearchOutlined, LineChartOutlined, QuestionCircleOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
+import { LineChartOutlined, QuestionCircleOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { UnderpricedResult } from '../types';
+import { formatNumber } from '../utils';
 
 const { Search } = Input;
 const { Text } = Typography;
@@ -12,22 +13,17 @@ interface UnderpricedItemsTableProps {
   loading: boolean;
 }
 
-const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loading }) => {  const [searchText, setSearchText] = useState('');
+const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loading }) => {
+  const [searchText, setSearchText] = useState('');
   const [fetchingData, setFetchingData] = useState<{ [key: number]: boolean }>({});
-  const [tableHeight, setTableHeight] = useState(400); // Default height in pixels
+  const [tableHeight, setTableHeight] = useState(400);
   const [isDragging, setIsDragging] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const formatNumber = (num: number, decimals: number = 0): string => {
-    return num.toLocaleString(undefined, { 
-      minimumFractionDigits: decimals, 
-      maximumFractionDigits: decimals 
-    });
-  };  const filteredData = data.filter(item =>
+  const filteredData = data.filter(item =>
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  // Drag resize functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -133,9 +129,9 @@ const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loa
             </Tooltip>
           )}
         </Space>
-      ),
-      align: 'right',
-    },    {
+      ),      align: 'right',
+    },
+    {
       title: 'Current Price',
       dataIndex: 'marketBuyPrice',
       key: 'marketBuyPrice',
@@ -162,9 +158,9 @@ const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loa
             {formatNumber(value, 1)}%
           </Tag>
         );
-      },
-      align: 'right',
-    },    {
+      },      align: 'right',
+    },
+    {
       title: 'Price Difference',
       dataIndex: 'priceDifference',
       key: 'priceDifference',
@@ -223,9 +219,10 @@ const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loa
           >
             <QuestionCircleOutlined style={{ color: '#888888', fontSize: '14px' }} />
           </Tooltip>
-        </Space>
-      }extra={
-        <Space direction="vertical" style={{ width: '100%' }}>          <Search
+        </Space>      }
+      extra={
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Search
             placeholder="Search items..."
             allowClear
             value={searchText}
@@ -233,7 +230,8 @@ const UnderpricedItemsTable: React.FC<UnderpricedItemsTableProps> = ({ data, loa
             style={{ width: 200 }}
           />
         </Space>
-      }    >
+      }
+    >
       {!isCollapsed && (
         <Table<UnderpricedResult>
           columns={columns}

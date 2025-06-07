@@ -4,23 +4,6 @@
   "description": "A powerful web application for finding profitable trading opportunities in Idle Clans",
   "author": "Dubzix",
   "license": "MIT",
-  "homepage": "https://github.com/yourusername/idle-clans-profit-finder#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yourusername/idle-clans-profit-finder.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/idle-clans-profit-finder/issues"
-  },
-  "keywords": [
-    "idle-clans",
-    "trading",
-    "profit-finder",
-    "market-analysis",
-    "react",
-    "typescript",
-    "antd"
-  ],
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
     "@types/node": "^16.11.56",
@@ -39,23 +22,5 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
